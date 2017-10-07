@@ -7,15 +7,16 @@ public class MainFrame extends JFrame {
     private Container cp;
     private JButton jbtnEx=new JButton("Example");
     private JButton jbtnEncrypt=new JButton("Encrypt");
+    private JButton jbtnDecrypted=new JButton("Decrypted");
     private JButton jbtnClear=new JButton("Clear");
     private JButton jbtnExit=new JButton("Exit");
     private JLabel jlab=new JLabel("Key");
-    private JTextField jtf=new JTextField("3");
+    private JTextField jtf=new JTextField("csie");
     private JTextArea jtaL=new JTextArea();
     private JTextArea jtaR=new JTextArea();
     private JScrollPane jspL=new JScrollPane(jtaL);
     private JScrollPane jspR=new JScrollPane(jtaR);
-    private JPanel jpn=new JPanel(new GridLayout(6,1,3,3));
+    private JPanel jpn=new JPanel(new GridLayout(7,1,3,3));
     private int count=0;
     public MainFrame(){
         init();
@@ -26,15 +27,16 @@ public class MainFrame extends JFrame {
         cp=this.getContentPane();
         cp.setLayout(new BorderLayout(3,3));
         cp.add(jpn,BorderLayout.CENTER);
+        cp.add(jspL,BorderLayout.WEST);
+        cp.add(jspR,BorderLayout.EAST);
         jpn.add(jbtnEx);
         jpn.add(jbtnEncrypt);
 //        jlab.setHorizontalAlignment(JLabel.CENTER);
         jpn.add(jlab);
         jpn.add(jtf);
+        jpn.add(jbtnDecrypted);
         jpn.add(jbtnClear);
         jpn.add(jbtnExit);
-        cp.add(jspL,BorderLayout.WEST);
-        cp.add(jspR,BorderLayout.EAST);
 //        jtaL.setPreferredSize(new Dimension(225,500));//設定偏好大小  用在此會無法無限往下拉
 //        jtaR.setPreferredSize(new Dimension(225,500));
         jspL.setPreferredSize(new Dimension(225,500));//設定偏好大小
@@ -57,8 +59,30 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 char data[]= jtaL.getText().toCharArray();
                 int len=data.length;
+                int j=0;
                 for(int i=0;i<len;i++){
-                    data[i]+=Integer.parseInt(jtf.getText());//Key的 字串轉整數  為左邊範文做加密
+                    if(j>jtf.getText().length()-1){
+                        j=0;
+                    }
+                    data[i]=    (char)  (   (int)data[i] ^ (int)jtf.getText().charAt(j) );
+                                            //把左邊範文 取出並整數化 與各個Key 做XOR處理後 轉回字元
+                    j++;
+                }
+                jtaR.setText(new String(data));
+            }
+        });
+        jbtnDecrypted.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                char data[]= jtaL.getText().toCharArray();
+                int len=data.length;
+                int j=0;
+                for(int i=0;i<len;i++){
+                    if(j>jtf.getText().length()-1){
+                        j=0;
+                    }
+                    data[i]=    (char)  (   (int)data[i] ^ (int)jtf.getText().charAt(j) );
+                    j++;
                 }
                 jtaR.setText(new String(data));
             }
